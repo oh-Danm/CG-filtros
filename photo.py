@@ -49,7 +49,7 @@ def equalizar(imagem):
 
 def thresholding(imagem, T):
     width, height = len(imagem[0]), len(imagem)
-    output = imagem
+    output = [[(0, 0, 0) for _ in range(width)] for _ in range(height)]
     for i in range(height):
         for j in range(width):
             value = output[i][j][0]
@@ -62,25 +62,45 @@ def thresholding(imagem, T):
     return output
 
 def apply_kernel(imagem, kernel, clamp = True):
-    width, height = len(imagem[0]), len(imagem)
+    width, height = len(imagem[0]), len(imagem) 
     k = 3
     border = k//2
     output = [[(0, 0, 0) for _ in range(width)] for _ in range(height)]
     for x in range(border, height-border):
         for y in range(border, width-border):
-            soma = 0
+            soma = 0.0
             for i in range(k):
+                ix = x + i - border
+                row = imagem[ix]
                 for j in range(k):
-                    neighbour = imagem[x+i - border][y+j - border][0]
-                    peso = kernel[i][j]
-                    soma += neighbour * peso
-            coiso = soma
+                    jy = y + j - border
+                    soma += row[jy][0] * kernel[i][j]
+            coiso = round(soma)
             if clamp:
-                coiso = max(0, min(255, round(soma)))
+                coiso = abs(max(0, min(255, round(soma))))
+            
             output[x][y] = (coiso, coiso, coiso)
 
+    return output
+
 def choose_kernel(opt):
-    a = 1
+    if opt == 0:
+        kernel = [[1/9]*3 for _ in range(3)]
+        return kernel
+    elif opt == 1:
+        kernel = [
+            [0, -1, 0],
+            [-1, 5, -1],
+            [0, -1, 0]
+        ]
+        return kernel
+    elif opt == 2:
+        kernel = [
+            [0, 1, 0],
+            [1, -4, 1],
+            [0, 1, 0]
+        ]
+        return kernel
 
 img = Image.open("input.jpg")
 largura, altura = img.size
@@ -110,11 +130,30 @@ thresh = thresholding(gray, 87)
 thresh_image = image_from_matrix(thresh)
 thresh_image.save("outputs/output_thresh.jpg")
 
+kernel = choose_kernel(0)
+soft = apply_kernel(gray, kernel, True)
 
+soft_image = image_from_matrix(soft)
+soft_image.save("outputs/output_soft.jpg")
 
+kernel = choose_kernel(1)
+sharpen = apply_kernel(gray, kernel, True)
 
-'''
-plt.bar(range(256), h)
-plt.title("histograma")
-plt.show()
-'''
+sharp_image = image_from_matrix(sharpen)
+sharp_image.save("outputs/output_sharp.jpg")
+
+kernel = choose_kernel(1)
+sharpen = apply_kernel(gray, kernel, True)
+
+sharp_image = image_from_matrix(sharpen)
+sharp_image.save("outputs/output_sharp.jpg")
+
+kernel = choose_kernel(2)
+border = apply_kernel(gray, kernel, True)
+
+border_image = image_from_matrix(border)
+border_image.save("outputs/output_border.jpg")
+
+# plt.bar(range(256), h)
+# plt.title("histograma")
+# plt.show()
