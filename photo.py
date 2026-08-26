@@ -61,13 +61,34 @@ def thresholding(imagem, T):
 
     return output
 
-img = Image.open("input.webp")
+def apply_kernel(imagem, kernel, clamp = True):
+    width, height = len(imagem[0]), len(imagem)
+    k = 3
+    border = k//2
+    output = [[(0, 0, 0) for _ in range(width)] for _ in range(height)]
+    for x in range(border, height-border):
+        for y in range(border, width-border):
+            soma = 0
+            for i in range(k):
+                for j in range(k):
+                    neighbour = imagem[x+i - border][y+j - border][0]
+                    peso = kernel[i][j]
+                    soma += neighbour * peso
+            coiso = soma
+            if clamp:
+                coiso = max(0, min(255, round(soma)))
+            output[x][y] = (coiso, coiso, coiso)
+
+def choose_kernel(opt):
+    a = 1
+
+img = Image.open("input.jpg")
 largura, altura = img.size
 pixels = img.load()
 imagem = [[pixels[x, y] for x in range(largura)] for y in range(altura)]
 
-for i in range(largura):
-    for j in range(altura):
+for i in range(altura):
+    for j in range(largura):
         r, g, b = imagem[i][j]
         imagem[i][j] = grayify(r, g, b)
 
@@ -78,11 +99,6 @@ gray = [[pixels[x, y] for x in range(largura)] for y in range(altura)]
 
 h = histograma(gray)
 
-'''
-plt.bar(range(256), h)
-plt.title("histograma")
-plt.show()
-'''
 
 equal = equalizar(gray)
 
@@ -93,3 +109,12 @@ thresh = thresholding(gray, 87)
 
 thresh_image = image_from_matrix(thresh)
 thresh_image.save("outputs/output_thresh.jpg")
+
+
+
+
+'''
+plt.bar(range(256), h)
+plt.title("histograma")
+plt.show()
+'''
