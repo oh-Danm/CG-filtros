@@ -13,7 +13,7 @@ python3 <nome-do-arquivo(photo.py)>
 *Nota: o código foi feito na versão 3.10.12 do Python, então verifique se sua versão do Python é compatível.*
 
 ### Execução
-Ao executar o programa e irá pedir o nome da imagem, você pode digitar o nome da imagem somente, se ela estiver no mesmo diretório do programa ou você pode indicar um caminho para a imagem.
+Ao executar, o programa e irá pedir o nome da imagem, você pode digitar o nome da imagem somente, se ela estiver no mesmo diretório do programa ou você pode indicar um caminho para a imagem.
 
 ```
 Digite o nome da imagem de input: <nome-da-imagem>
