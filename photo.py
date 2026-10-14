@@ -196,8 +196,7 @@ def open_close(imagem, size, open = True):
     else:
         return mediana_dilate_erode(mediana_dilate_erode(imagem, size, 1), size, 2)
 
-print("Digite o nome da imagem de input: ")
-name = str(input())
+name = input("Digite o nome da imagem de input: ")
 
 img = Image.open(name)
 width, height = img.size
@@ -213,13 +212,12 @@ gray_image = image_from_matrix(imagem)
 pixels = gray_image.load()
 gray = [[pixels[x, y] for x in range(width)] for y in range(height)]
 
-print("Digite o caminho para o arquivo de output (formato: dir1/dir2/dir3/): ")
-path_output = str(input())
+path_output = input("Digite o caminho para o arquivo de output: ")
 
 opt = 0
 
 while True:
-    print("Escolha o a operação a ser realizada:")
+    print("\nEscolha o a operação a ser realizada:")
     print("1-Histograma")
     print("2-Escala de cinza")
     print("3-Limiarizar")
@@ -238,6 +236,8 @@ while True:
     print("16-Fechamento")
     print("17-Sair")
 
+    opt = int(input("\nOpção: "))
+
     if opt == 1:
         h = histograma(gray)
         plt.bar(range(256), h)
@@ -249,8 +249,7 @@ while True:
         print("Imagem salva com sucesso!")
 
     elif opt == 3:
-        print("Digite o threshhold: ")
-        threshold = int(input())
+        threshold = int(input("Digite o threshhold (recomendado maior ou igual a 87): "))
         thresh = thresholding(gray, threshold)
         thresh_image = image_from_matrix(thresh)
         thresh_image.save(path_output+"output_thresh.jpg")
@@ -296,8 +295,7 @@ while True:
         print("Imagem salva com sucesso!")
 
     elif opt == 10:
-        print("Digite a quantidade de motion blur (recomendado de 3 para cima): ")
-        qtd = int(input())
+        qtd = int(input("Digite a quantidade de motion blur (recomendado de 3 para cima): "))
         kernel = choose_kernel(8, size=qtd)
         motion_blur = apply_kernel(gray, kernel, k=qtd)
         motion_blur_image = image_from_matrix(motion_blur)
