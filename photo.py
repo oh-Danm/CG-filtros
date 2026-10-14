@@ -213,7 +213,7 @@ gray_image = image_from_matrix(imagem)
 pixels = gray_image.load()
 gray = [[pixels[x, y] for x in range(width)] for y in range(height)]
 
-print("Digite o caminho para o arquivo de output (formato: dir1/dir2/dir3/): ")
+print("Digite o caminho para o arquivo de output: ")
 path_output = str(input())
 
 opt = 0
@@ -237,6 +237,8 @@ while True:
     print("15-Abertura")
     print("16-Fechamento")
     print("17-Sair")
+
+    opt = int(input())
 
     if opt == 1:
         h = histograma(gray)
